@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<div id="app">
+
+
+	<router-link to="/foo/djfkg/post/34">Go to Foo</router-link>
+    <router-link to="/bar">Go to Bar</router-link>
+<!-- <tem-a></tem-a> -->
+	<router-view></router-view>
+
+</div>
+
+<!-- tempalte begin-->
+
+<template id="temA">
+	<p>{{tema}}{{$route.params}}</p>
+</template>
+
+<template id="temB">
+	<p>{{temb}}</p>
+</template>
+
+<!-- tempalte end-->
+
+
+<script src="node_modules/vue/dist/vue.min.js"></script>
+<script src="node_modules/vue-router/dist/vue-router.min.js"></script>
+<script>
+
+// 注册组件 begin
+var tema = Vue.component('tem-a' , {
+	template:'#temA',
+	data:function () {
+		return {
+			tema:'this is tema'
+		}
+	}
+});
+
+var temb = Vue.component('tem-b' , {
+	template:'#temB',
+	data:function () {
+		return {
+			temb:'this is temb'
+		}	
+	}
+});
+// 注册组件 end
+
+
+// 2. 定义路由
+// 每个路由应该映射一个组件。 其中"component" 可以是
+// 通过 Vue.extend() 创建的组件构造器，
+// 或者，只是一个组件配置对象。
+// 我们晚点再讨论嵌套路由。
+const routes = [
+{ 
+	path: '/foo/:username/post/:post_id', 
+	name:'foo',
+	component: tema ,
+	beforeEnter:function (to , from , next) {
+
+		console.log(to.params);
+		console.log(from.params);
+		console.log(next);
+		// if(to.params.id != 'jj')
+		// 	window.location.href="http://www.baidu.com"
+	}
+}
+]
+
+// const routes = [
+//   { path: '/foo', component: {template:'<p>dg</p>' }},
+//   { path: '/bar', component: {template:'<p>fldg</p>' }}
+// ]
+
+// 3. 创建 router 实例，然后传 `routes` 配置
+// 你还可以传别的配置参数, 不过先这么简单着吧。
+const router = new VueRouter({
+  routes // （缩写）相当于 routes: routes
+})
+
+router.push( { path:'foo ' } );
+// router.push({name:'foo',params:{'username':'fgm','post_id':123}});
+
+var data = {
+	msg:'this is msg'
+}
+
+
+// 4. 创建和挂载根实例。
+// 记得要通过 router 配置参数注入路由，
+// 从而让整个应用都有路由功能
+const app = new Vue({
+  router,data
+}).$mount('#app')
+
+
+
+// 现在，应用已经启动了！
+
+// var vue = new Vue({
+// 	el:'#vue',
+// 	data:{
+// 		'pname':'this is a paragraph'
+// 	},
+// 	router
+// });
+
+
+
+</script>
+</body>
+</html>
